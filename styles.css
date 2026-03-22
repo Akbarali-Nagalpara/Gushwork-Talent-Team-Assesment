@@ -845,6 +845,7 @@ main::before {
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14) inset;
     gap: 8px;
     justify-content: space-between;
+}
 
 .tech-download-btn {
     display: inline-flex;
@@ -1490,6 +1491,19 @@ main::before {
     align-items: center;
     gap: 8px;
     cursor: pointer;
+}
+
+@media (max-width: 640px) {
+    .portfolio-help {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .portfolio-help button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
 }
 
 .resources-section {
@@ -2925,4 +2939,5 @@ main::before {
         height: 38px;
         font-size: 18px;
     }
+}
 }
