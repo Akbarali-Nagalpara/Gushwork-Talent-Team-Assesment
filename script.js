@@ -332,4 +332,131 @@ document.addEventListener('DOMContentLoaded', () => {
             renderProcess(processOrder[nextIndex]);
         });
     }
+
+    const configureModal = ({
+        modalSelector,
+        triggerSelector,
+        focusSelector,
+        onSubmit,
+        shouldValidateEmail = false
+    }) => {
+        const modal = document.querySelector(modalSelector);
+        const trigger = typeof triggerSelector === 'string'
+            ? document.querySelectorAll(triggerSelector)
+            : triggerSelector;
+
+        if (!modal || !trigger || trigger.length === 0) {
+            return;
+        }
+
+        const closeTriggers = modal.querySelectorAll('[data-modal-close]');
+        const form = modal.querySelector('form');
+        const focusTarget = modal.querySelector(focusSelector || 'input, select, textarea, button');
+        const submitButton = modal.querySelector('.tech-modal__submit');
+        const emailInput = shouldValidateEmail ? modal.querySelector('input[type="email"]') : null;
+
+        const isValidEmail = (value) => /\S+@\S+\.\S+/.test(value.trim());
+
+        const setSubmitState = () => {
+            if (!submitButton || !shouldValidateEmail) {
+                return;
+            }
+
+            const canSubmit = emailInput && isValidEmail(emailInput.value);
+            submitButton.disabled = !canSubmit;
+        };
+
+        const openModal = () => {
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+
+            if (form) {
+                form.reset();
+            }
+
+            if (submitButton) {
+                submitButton.disabled = shouldValidateEmail;
+            }
+
+            if (focusTarget) {
+                setTimeout(() => focusTarget.focus(), 50);
+            }
+        };
+
+        const closeModal = () => {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+        };
+
+        Array.from(trigger).forEach((singleTrigger) => {
+            singleTrigger.addEventListener('click', (event) => {
+                event.preventDefault();
+                openModal();
+            });
+        });
+
+        closeTriggers.forEach((closeTrigger) => {
+            closeTrigger.addEventListener('click', closeModal);
+        });
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal || event.target.classList.contains('tech-modal__backdrop')) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+                closeModal();
+            }
+        });
+
+        if (emailInput) {
+            emailInput.addEventListener('input', setSubmitState);
+        }
+
+        if (form && submitButton) {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending…';
+
+                Promise.resolve(onSubmit ? onSubmit(new FormData(form)) : null)
+                    .then(() => {
+                        submitButton.textContent = submitButton.dataset.defaultText || submitButton.textContent;
+                        closeModal();
+                    })
+                    .catch(() => {
+                        submitButton.textContent = submitButton.dataset.errorText || 'Try Again';
+                        setTimeout(() => {
+                            submitButton.textContent = submitButton.dataset.defaultText || 'Submit';
+                            submitButton.disabled = false;
+                        }, 1200);
+                    });
+            });
+        }
+
+        if (submitButton && !submitButton.dataset.defaultText) {
+            submitButton.dataset.defaultText = submitButton.textContent;
+        }
+
+        setSubmitState();
+    };
+
+    configureModal({
+        modalSelector: '#datasheetModal',
+        triggerSelector: '.tech-download-btn',
+        focusSelector: 'input[name="datasheet-email"]',
+        shouldValidateEmail: true,
+        onSubmit: () => new Promise((resolve) => setTimeout(resolve, 1000))
+    });
+
+    configureModal({
+        modalSelector: '#quoteModal',
+        triggerSelector: '[data-quote-trigger]',
+        focusSelector: 'input[name="quote-name"]',
+        onSubmit: () => new Promise((resolve) => setTimeout(resolve, 1000))
+    });
 });

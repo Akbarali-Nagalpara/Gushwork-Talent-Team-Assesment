@@ -1493,6 +1493,206 @@ main::before {
     cursor: pointer;
 }
 
+body.modal-open {
+    overflow: hidden;
+}
+
+.tech-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 1200;
+}
+
+.tech-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.tech-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(6px);
+}
+
+.tech-modal__dialog {
+    position: relative;
+    width: min(100%, 420px);
+    border-radius: 22px;
+    border: 1px solid rgba(43, 57, 144, 0.24);
+    background: #FFFFFF;
+    box-shadow: 0 32px 80px rgba(15, 23, 42, 0.28);
+    padding: 28px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.tech-modal__dialog::before,
+.tech-modal__dialog::after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background-image: repeating-linear-gradient(90deg, #2f43a7 0 16px, transparent 16px 24px);
+    opacity: 0.35;
+}
+
+.tech-modal__dialog::before {
+    top: 64px;
+}
+
+.tech-modal__dialog::after {
+    bottom: 76px;
+}
+
+.tech-modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.tech-modal__header h3 {
+    margin: 0;
+    font-family: 'Urbanist', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #0D0D0D;
+    line-height: 130%;
+}
+
+.tech-modal__close {
+    border: 1px solid rgba(15, 23, 42, 0.12);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    background: #FFFFFF;
+    color: #111827;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.tech-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.tech-modal__form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.tech-modal__form label small {
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.tech-modal__form input {
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    padding: 0 14px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: #0f172a;
+    background: #F9FAFB;
+}
+
+.tech-modal__form input::placeholder {
+    color: #9aa0ae;
+}
+
+.tech-modal__cta {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.tech-modal__phone-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 10px;
+}
+
+.tech-modal__phone-row select,
+.tech-modal__phone-row input {
+    height: 44px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    padding: 0 14px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: #0f172a;
+    background: #F9FAFB;
+}
+
+.tech-modal__phone-row select {
+    cursor: pointer;
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #111827 50%), linear-gradient(135deg, #111827 50%, transparent 50%);
+    background-position: calc(100% - 18px) calc(50% - 4px), calc(100% - 10px) calc(50% - 4px);
+    background-size: 8px 8px, 8px 8px;
+    background-repeat: no-repeat;
+}
+
+.tech-modal__submit {
+    min-width: 180px;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #2B3990, #1f2d5c);
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.tech-modal__submit:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+@media (max-width: 540px) {
+    .tech-modal {
+        padding: 16px;
+    }
+
+    .tech-modal__dialog {
+        width: 100%;
+        padding: 24px 18px 18px;
+    }
+
+    .tech-modal__dialog::before,
+    .tech-modal__dialog::after {
+        left: 14px;
+        right: 14px;
+    }
+
+    .tech-modal__cta {
+        justify-content: stretch;
+    }
+
+    .tech-modal__submit {
+        width: 100%;
+    }
+}
+
 @media (max-width: 640px) {
     .portfolio-help {
         flex-direction: column;
